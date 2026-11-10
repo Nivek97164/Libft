@@ -6,12 +6,14 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/02 11:55:01 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/06 19:27:18 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/10 14:57:12 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
@@ -36,3 +38,4 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int	ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strdup(const char *s);
+char *ft_substr(char const *s, unsigned int start, size_t len);

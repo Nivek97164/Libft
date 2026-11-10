@@ -6,7 +6,7 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 19:26:38 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/06 19:26:43 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/10 14:00:12 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	*ft_calloc(size_t count, size_t size)
 {
     void	*ptr;
 
-	if (count != 0 && size > SIZE_MAX / count)
+	if (count != 0 && size > SIZE_MAX / count)	
 		return (NULL);
 	ptr = malloc(count * size);
     if (!ptr)
