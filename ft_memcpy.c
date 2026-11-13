@@ -6,16 +6,16 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 16:15:58 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/03 16:44:46 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/13 14:31:53 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t		i;
-	unsigned char	*d;
+	size_t				i;
+	unsigned char		*d;
 	const unsigned char	*s;
 
 	if (!dest && !src)

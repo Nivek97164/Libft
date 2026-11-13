@@ -6,7 +6,7 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 19:01:10 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/06 19:02:39 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/13 14:41:15 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_toupper(int c)
 {
-    if (c >= 'a' && c <= 'z')
-        return (c - 32);
-    return (c);
+	if (c >= 'a' && c <= 'z')
+		return (c - 32);
+	return (c);
 }

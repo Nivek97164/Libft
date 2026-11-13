@@ -6,18 +6,18 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 16:46:59 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/03 17:24:41 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/13 15:04:19 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	size_t				i;
 	unsigned char		*d;
 	const unsigned char	*s;
-	
+
 	if (!dest && !src)
 		return (NULL);
 	d = (unsigned char *)dest;
@@ -30,7 +30,6 @@ void *ft_memmove(void *dest, const void *src, size_t n)
 			d[i] = s[i];
 			i++;
 		}
-		
 	}
 	else if (d > s)
 	{

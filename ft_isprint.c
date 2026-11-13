@@ -6,11 +6,11 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 14:01:38 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/03 14:21:19 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/13 14:23:15 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isprint(int c)
+int	ft_isprint(int c)
 {
-    return (c >= 32 && c <= 126);
+	return (c >= 32 && c <= 126);
 }

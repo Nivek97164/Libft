@@ -6,11 +6,11 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 13:52:58 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/03 14:04:48 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/13 14:22:48 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isascii(int c)
+int	ft_isascii(int c)
 {
-    return (c >= 0 && c <= 127);
+	return (c >= 0 && c <= 127);
 }
