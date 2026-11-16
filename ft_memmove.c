@@ -6,15 +6,30 @@
 /*   By: kevberna <kevberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 16:46:59 by kevberna          #+#    #+#             */
-/*   Updated: 2026/11/13 15:04:19 by kevberna         ###   ########.fr       */
+/*   Updated: 2026/11/16 14:49:16 by kevberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static	void	copy_forbackward(unsigned char *d, const unsigned char *s,
+				size_t n, int backward)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (backward)
+			d[n - 1 - i] = s[n - 1 - i];
+		else
+			d[i] = s[i];
+		i++;
+	}
+}
+
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	size_t				i;
 	unsigned char		*d;
 	const unsigned char	*s;
 
@@ -23,22 +38,8 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	d = (unsigned char *)dest;
 	s = (const unsigned char *)src;
 	if (d < s)
-	{
-		i = 0;
-		while (i < n)
-		{
-			d[i] = s[i];
-			i++;
-		}
-	}
+		copy_forbackward(d, s, n, 0);
 	else if (d > s)
-	{
-		i = n;
-		while (i > 0)
-		{
-			i--;
-			d[i] = s[i];
-		}
-	}
+		copy_forbackward(d, s, n, 1);
 	return (dest);
 }
