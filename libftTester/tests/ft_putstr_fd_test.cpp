@@ -14,6 +14,14 @@ extern "C"
 #include <unistd.h>
 
 int iTest = 1;
+static string readBack(int fd)
+{
+	lseek(fd, 0, SEEK_SET);
+	string r; char buf[256]; ssize_t n;
+	while ((n = read(fd, buf, sizeof(buf))) > 0) r.append(buf, n);
+	return r;
+}
+
 int main(void)
 {
 	signal(SIGSEGV, sigsegv);
@@ -26,6 +34,45 @@ int main(void)
 	/* 1 */ check(!strcmp(s, "42")); showLeaks();
 	close(fd);
 	unlink("./tripouille");
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putstr_fd((char*)"hello world", fd);
+		/* 2 */ check(readBack(fd) == "hello world"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putstr_fd((char*)"", fd);
+		/* 3 */ check(readBack(fd) == ""); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putstr_fd((char*)"a\nb", fd);
+		/* 4 */ check(readBack(fd) == "a\nb"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putstr_fd((char*)"ab", fd); ft_putstr_fd((char*)"cd", fd);
+		/* 5 */ check(readBack(fd) == "abcd"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		string big(10000, 'x'); ft_putstr_fd((char*)big.c_str(), fd);
+		/* 6 */ check(readBack(fd) == string(10000, 'x')); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		char withNul[] = "ab\0cd"; ft_putstr_fd(withNul, fd);
+		/* 7 */ check(readBack(fd) == "ab"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	ft_putstr_fd((char*)"a", -1); //Invalid fd must not crash
+	/* 8 */ check(1); showLeaks();
+
 	write(1, "\n", 1);
 	return (0);
 }

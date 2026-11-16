@@ -28,6 +28,24 @@ int main(void)
 	for (; i < 100 && dest[i] == 0; ++i)
 		;
 	/* 3 */ check(i == 2 && dest[2] == 'A'); showLeaks();
+	memset(dest, 'A', 100);
+	/* 4 */ check(ft_memcpy(dest, "12345", 5) == dest && !memcmp(dest, "12345AAAAA", 10)); showLeaks();
+	memset(dest, 'A', 100);
+	ft_memcpy(dest + 1, "xyz", 2);
+	/* 5 */ check(!memcmp(dest, "AxyAAAAAAA", 10)); showLeaks(); //Copies exactly n bytes
+	unsigned char bin[] = {0, 255, 128, 0, 1};
+	unsigned char binDest[5];
+	ft_memcpy(binDest, bin, 5);
+	/* 6 */ check(!memcmp(binDest, bin, 5)); showLeaks(); //Binary data, not a string copy
+	/* 7 */ check(ft_memcpy(dest, dest, 10) == dest); showLeaks();
+	/* 8 */ check(ft_memcpy(dest, "x", 0) == dest); showLeaks();
+	/* 9 */ check(ft_memcpy(NULL, NULL, 0) == NULL); showLeaks();
+	unsigned char * bigSrc = (unsigned char *)malloc(100000);
+	unsigned char * bigDest = (unsigned char *)malloc(100000);
+	for (int j = 0; j < 100000; ++j) bigSrc[j] = j % 251;
+	ft_memcpy(bigDest, bigSrc, 100000);
+	/* 10 */ check(!memcmp(bigDest, bigSrc, 100000)); free(bigSrc); free(bigDest); showLeaks();
+
 	write(1, "\n", 1);
 	return (0);
 }

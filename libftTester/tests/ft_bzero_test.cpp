@@ -31,6 +31,23 @@ int main(void)
 	for (; i < 100 && tab[i] == 0; ++i)
 		;
 	/* 3 */ check(i == 42); showLeaks();
+	char t2[10]; memset(t2, 'A', 10);
+	ft_bzero(t2, 1);
+	/* 4 */ check(t2[0] == 0 && t2[1] == 'A'); showLeaks();
+	ft_bzero(t2, 10);
+	bool allZero = true;
+	for (int j = 0; j < 10; ++j) if (t2[j] != 0) allZero = false;
+	/* 5 */ check(allZero); showLeaks();
+	memset(t2, 'A', 10);
+	ft_bzero(t2 + 3, 4);
+	/* 6 */ check(!memcmp(t2, "AAA\0\0\0\0AAA", 10)); showLeaks(); //Only [3, 7)
+	char * heap = (char *)malloc(100000);
+	memset(heap, 'x', 100000);
+	ft_bzero(heap, 100000);
+	bool heapZero = true;
+	for (int j = 0; j < 100000; ++j) if (heap[j] != 0) heapZero = false;
+	/* 7 */ check(heapZero); free(heap); showLeaks();
+
 	write(1, "\n", 1);
 	return (0);
 }

@@ -9,6 +9,7 @@ extern "C"
 #include "check.hpp"
 #include "leaks.hpp"
 #include <string.h>
+#include <stdint.h>
 
 int iTest = 1;
 int main(void)
@@ -49,6 +50,47 @@ int main(void)
 	s = ft_substr("test", 1, 2);
 	/* 15  dfarhi */ check(!strcmp(s, "es"));
 	/* 16  dfarhi */ mcheck(s, 3); free(s); showLeaks();
+
+	s = ft_substr("hello", 0, 5);
+	/* 17 */ check(!strcmp(s, "hello"));
+	/* 18 */ mcheck(s, 6); free(s); showLeaks();
+
+	s = ft_substr("hello", 0, 3);
+	/* 19 */ check(!strcmp(s, "hel"));
+	/* 20 */ mcheck(s, 4); free(s); showLeaks();
+
+	s = ft_substr("hello", 2, 2);
+	/* 21 */ check(!strcmp(s, "ll"));
+	/* 22 */ mcheck(s, 3); free(s); showLeaks();
+
+	s = ft_substr("hello", 4, 10);
+	/* 23 */ check(!strcmp(s, "o"));
+	/* 24 */ mcheck(s, 2); free(s); showLeaks();
+
+	s = ft_substr("hello", 5, 3); //start == strlen
+	/* 25 */ check(!strcmp(s, ""));
+	/* 26 */ mcheck(s, 1); free(s); showLeaks();
+
+	s = ft_substr("hello", 6, 3); //start == strlen + 1
+	/* 27 */ check(!strcmp(s, ""));
+	/* 28 */ mcheck(s, 1); free(s); showLeaks();
+
+	s = ft_substr("", 0, 5);
+	/* 29 */ check(!strcmp(s, ""));
+	/* 30 */ mcheck(s, 1); free(s); showLeaks();
+
+	s = ft_substr("hello", 1, 0);
+	/* 31 */ check(!strcmp(s, ""));
+	/* 32 */ mcheck(s, 1); free(s); showLeaks();
+
+	s = ft_substr("hello", 1, SIZE_MAX); //start + len overflow
+	/* 33 */ check(!strcmp(s, "ello"));
+	/* 34 */ mcheck(s, 5); free(s); showLeaks();
+
+	char src[] = "abcdef";
+	s = ft_substr(src, 2, 3);
+	/* 35 */ check(!strcmp(s, "cde") && s != src + 2 && !strcmp(src, "abcdef")); //Real copy, src untouched
+	/* 36 */ mcheck(s, 4); free(s); showLeaks();
 
 	write(1, "\n", 1);
 	return (0);

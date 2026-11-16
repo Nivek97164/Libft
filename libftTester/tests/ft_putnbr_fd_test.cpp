@@ -15,6 +15,14 @@ extern "C"
 #include <climits>
 
 int iTest = 1;
+static string readBack(int fd)
+{
+	lseek(fd, 0, SEEK_SET);
+	string r; char buf[256]; ssize_t n;
+	while ((n = read(fd, buf, sizeof(buf))) > 0) r.append(buf, n);
+	return r;
+}
+
 int main(void)
 {
 	signal(SIGSEGV, sigsegv);
@@ -59,6 +67,49 @@ int main(void)
 	/* 5 ipenas */ check(!strcmp(s, "-42")); showLeaks();
 	close(fd);
 	unlink("./tripouille");
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putnbr_fd(1, fd);
+		/* 6 */ check(readBack(fd) == "1"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putnbr_fd(-1, fd);
+		/* 7 */ check(readBack(fd) == "-1"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putnbr_fd(9, fd); ft_putnbr_fd(10, fd);
+		/* 8 */ check(readBack(fd) == "910"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putnbr_fd(4, fd); ft_putnbr_fd(2, fd);
+		/* 9 */ check(readBack(fd) == "42"); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		ft_putnbr_fd(INT_MIN, fd); ft_putnbr_fd(INT_MAX, fd);
+		/* 10 */ check(readBack(fd) == to_string(INT_MIN) + to_string(INT_MAX)); showLeaks();
+		close(fd); unlink("tripouille");
+	}
+	{
+		int vals[] = {-9, 99, 100, -100, 1000, 12345, -12345, 1000000000, -1000000000, 2147483646, -2147483647};
+		bool ok = true;
+		for (size_t i = 0; i < sizeof(vals) / sizeof(*vals); ++i)
+		{
+			int fd = open("tripouille", O_RDWR | O_CREAT | O_TRUNC, 0777);
+			ft_putnbr_fd(vals[i], fd);
+			if (readBack(fd) != to_string(vals[i])) ok = false; //No trailing '\n', no padding
+			close(fd); unlink("tripouille");
+		}
+		/* 11 */ check(ok); showLeaks();
+	}
+
 	write(1, "\n", 1);
 	return (0);
 }

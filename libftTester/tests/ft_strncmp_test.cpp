@@ -46,6 +46,31 @@ int main(void)
 	str2[3] = -42;
 	/* 18 */ check(sign(ft_strncmp((const char *)str1, (const char *)str2, len)) == sign(strncmp((const char *)str1, (const char *)str2, len))); showLeaks();
 
+	/* 19 */ check(ft_strncmp("abc", "abc", 3) == 0); showLeaks();
+	/* 20 */ check(ft_strncmp("abc", "abd", 2) == 0); showLeaks(); //Difference is after n
+	/* 21 */ check(ft_strncmp("abc", "abd", 3) < 0); showLeaks();
+	/* 22 */ check(ft_strncmp("abd", "abc", 3) > 0); showLeaks();
+	/* 23 */ check(ft_strncmp("abc", "abcd", 3) == 0); showLeaks();
+	/* 24 */ check(ft_strncmp("abc", "abcd", 4) < 0); showLeaks();
+	/* 25 */ check(ft_strncmp("abcd", "abc", 4) > 0); showLeaks();
+	char nulA[] = {'a', 'b', 0, 'c', 'd', 0}, nulB[] = {'a', 'b', 0, 'c', 'e', 0};
+	/* 26 */ check(ft_strncmp(nulA, nulB, 5) == 0); showLeaks(); //Must stop at '\0'
+	char hiA[] = {(char)0x80, 0}, hiB[] = {0x7f, 0};
+	/* 27 */ check(ft_strncmp(hiA, hiB, 1) > 0); showLeaks(); //Unsigned comparison
+	/* 28 */ check(ft_strncmp(hiB, hiA, 1) < 0); showLeaks();
+	/* 29 */ check(ft_strncmp(hiA, "", 1) > 0); showLeaks();
+	{
+		bool ok = true; //Every pair of chars compared to the libc
+		for (int i = 0; i < 256; ++i)
+			for (int j = 0; j < 256; ++j)
+			{
+				char a[2] = {(char)i, 0}, b[2] = {(char)j, 0};
+				if (sign(ft_strncmp(a, b, 2)) != sign(strncmp(a, b, 2))) ok = false;
+				if (sign(ft_strncmp(a, b, 1)) != sign(strncmp(a, b, 1))) ok = false;
+			}
+		/* 30 */ check(ok); showLeaks();
+	}
+
 	write(1, "\n", 1);
 	return (0);
 }

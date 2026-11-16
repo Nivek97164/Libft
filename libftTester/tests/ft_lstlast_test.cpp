@@ -26,6 +26,17 @@ int main(void)
 	/* 3 */ check(ft_lstlast(l)->content == (void*)2);
 	/* 4 */ check(ft_lstlast(l)->next == 0);
 	freeList(l); showLeaks();
+	t_list * one = ft_lstnew((void*)7);
+	/* 5 */ check(ft_lstlast(one) == one); //Single node: it is its own last
+	freeList(one); showLeaks();
+
+	t_list * lf = NULL;
+	for (long i = 1; i <= 10; ++i)
+		ft_lstadd_front(&lf, ft_lstnew((void*)i));
+	/* 6 */ check(ft_lstlast(lf)->content == (void*)1 && ft_lstlast(lf)->next == 0); //10 9 ... 1
+	/* 7 */ check(lf->content == (void*)10); //List not modified
+	freeList(lf); showLeaks();
+
 	write(1, "\n", 1);
 	return (0);
 }

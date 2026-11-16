@@ -115,6 +115,66 @@ int main(void)
 	/* 42 */ check(tab[6] == NULL);
 	free(splitme); freeTab(tab); showLeaks();
 	
+	tab = ft_split("a,b,c", ',');
+	/* 43 */ mcheck(tab, sizeof(char *) * 4);
+	/* 44 */ check(!strcmp(tab[0], "a") && !strcmp(tab[1], "b") && !strcmp(tab[2], "c"));
+	/* 45 */ check(tab[3] == NULL);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split("xxxx", 'x'); //Only delimiters
+	/* 46 */ mcheck(tab, sizeof(char *) * 1);
+	/* 47 */ check(tab[0] == NULL);
+	free(tab); showLeaks();
+
+	tab = ft_split("abc,,,", ','); //Trailing delimiters
+	/* 48 */ mcheck(tab, sizeof(char *) * 2);
+	/* 49 */ check(!strcmp(tab[0], "abc") && tab[1] == NULL);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split(",,abc", ','); //Leading delimiters
+	/* 50 */ mcheck(tab, sizeof(char *) * 2);
+	/* 51 */ check(!strcmp(tab[0], "abc") && tab[1] == NULL);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split("a,,b", ','); //Consecutive delimiters
+	/* 52 */ mcheck(tab, sizeof(char *) * 3);
+	/* 53 */ check(!strcmp(tab[0], "a") && !strcmp(tab[1], "b") && tab[2] == NULL);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split("hello world foo bar", ' ');
+	/* 54 */ mcheck(tab, sizeof(char *) * 5);
+	/* 55 */ check(!strcmp(tab[0], "hello") && !strcmp(tab[1], "world") && !strcmp(tab[2], "foo") && !strcmp(tab[3], "bar") && tab[4] == NULL);
+	/* 56 */ mcheck(tab[0], 6);
+	/* 57 */ mcheck(tab[3], 4);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split("one\ttwo\tthree", '\t');
+	/* 58 */ check(!strcmp(tab[0], "one") && !strcmp(tab[1], "two") && !strcmp(tab[2], "three") && tab[3] == NULL);
+	freeTab(tab); showLeaks();
+
+	tab = ft_split("a", 'a');
+	/* 59 */ check(tab[0] == NULL);
+	free(tab); showLeaks();
+
+	tab = ft_split("a", 'b');
+	/* 60 */ check(!strcmp(tab[0], "a") && tab[1] == NULL);
+	freeTab(tab); showLeaks();
+
+	char * origStr = strdup("a b c");
+	tab = ft_split(origStr, ' ');
+	/* 61 */ check(!strcmp(origStr, "a b c") && tab[0] != origStr); //Source untouched
+	free(origStr); freeTab(tab); showLeaks();
+
+	{
+		string many;
+		for (int i = 0; i < 1000; ++i) many += "ab ";
+		tab = ft_split(many.c_str(), ' ');
+		int count = 0; bool ok = true;
+		for (; tab[count] != NULL; ++count) if (strcmp(tab[count], "ab")) ok = false;
+		/* 62 */ check(count == 1000 && ok);
+		freeTab(tab); showLeaks();
+	}
+
 	write(1, "\n", 1);
 	return (0);
 }

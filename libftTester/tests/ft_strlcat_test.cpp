@@ -51,6 +51,28 @@ int main(void)
 	/* 16 */ check(ft_strlcat(dest, "123", 4) == 3 && !strcmp(dest, "123")); showLeaks();
 	memset(dest, 0, 30);
 	/* 17 */ check(ft_strlcat(dest, "123", 0) == 3 && !strcmp(dest, "")); showLeaks();
+	char d2[30];
+	memset(d2, 0, 30); strcpy(d2, "Hello");
+	/* 18 */ check(ft_strlcat(d2, " World", 30) == 11 && !strcmp(d2, "Hello World")); showLeaks();
+	memset(d2, 0, 30); strcpy(d2, "Hello");
+	/* 19 */ check(ft_strlcat(d2, " World", 12) == 11 && !strcmp(d2, "Hello World")); showLeaks(); //Exact fit
+	memset(d2, 0, 30); strcpy(d2, "Hello");
+	/* 20 */ check(ft_strlcat(d2, " World", 11) == 11 && !strcmp(d2, "Hello Worl")); showLeaks(); //Truncated by 1
+	memset(d2, 0, 30); strcpy(d2, "Hello");
+	/* 21 */ check(ft_strlcat(d2, "World", 5) == 10 && !strcmp(d2, "Hello")); showLeaks(); //size == strlen(dst)
+	memset(d2, 0, 30); strcpy(d2, "Hello");
+	/* 22 */ check(ft_strlcat(d2, "World", 6) == 10 && !strcmp(d2, "Hello")); showLeaks(); //No room left
+	memset(d2, 0, 30);
+	/* 23 */ check(ft_strlcat(d2, "abc", 30) == 3 && !strcmp(d2, "abc")); showLeaks(); //Empty dst
+	memset(d2, 0, 30);
+	ft_strlcat(d2, "ab", 30);
+	/* 24 */ check(ft_strlcat(d2, "cd", 30) == 4 && !strcmp(d2, "abcd")); showLeaks(); //Two calls in a row
+	memset(d2, 'Z', 30); d2[0] = 'a'; d2[1] = 0;
+	/* 25 */ check(ft_strlcat(d2, "bcdef", 4) == 6 && !strcmp(d2, "abc") && d2[4] == 'Z'); showLeaks(); //No write past size
+	string big(1000, 'x');
+	memset(d2, 0, 30);
+	/* 26 */ check(ft_strlcat(d2, big.c_str(), 30) == 1000 && strlen(d2) == 29); showLeaks();
+
 	write(1, "\n", 1);
 	return (0);
 }
